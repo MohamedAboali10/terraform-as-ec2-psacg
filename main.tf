@@ -23,15 +23,16 @@ provider "aws" {
 }
 
 
-module "ec2-psacg" {
-  source        = "git::https://github.com/mohamedaboali10/terraform-as-ec2-psacg.git"
-  instance_count = var.instance_count
-  ami            = var.ami
-  instance_type  = var.instance_type
-  subnet         = var.subnet
+resource "aws_instance" "inst" {
+  count         = var.instance_count
+  ami           = var.ami
+  instance_type = var.instance_type
+  subnet_id     = var.subnet
+
+  tags = {
+    Name = "TERRAFORM-GURU-${count.index}"
+  }
 }
-
-
 
 variable "instance_count" {}
 
@@ -42,5 +43,5 @@ variable "instance_type" {}
 variable "subnet" {}
 
 output "aws_instances" {
-  value = module.ec2-psacg.*.aws_instances
+  value = aws_instance.inst.*.tags.Name
 }
