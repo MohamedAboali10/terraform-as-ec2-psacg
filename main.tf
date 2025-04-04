@@ -9,6 +9,7 @@ resource "aws_instance" "inst" {
   }
 }
 
+
 variable "instance_count" {}
 
 variable "ami" {}
